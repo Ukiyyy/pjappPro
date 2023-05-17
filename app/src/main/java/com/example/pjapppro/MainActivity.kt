@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
             // Shranite povezavo v primeru, da je na voljo
             val url = scannedData?.let { getUrlFromQRCode(it) }
             Log.d("SCAN", "URL: $url")
+            val code = url?.let { extractCodeFromURL(it) }
+            Log.d("SCAN", "Extracted code: ${code?.toInt()}")
         }
     }
     private fun getUrlFromQRCode(scannedData: String): String? {
@@ -37,6 +39,12 @@ class MainActivity : AppCompatActivity() {
             return scannedData
         }
         return null
+    }
+    private fun extractCodeFromURL(url: String): String? {
+        val pattern = "/([0-9]{6})/"  // Uporabite ustrezno vzorec glede na vašo specifikacijo
+        val regex = Regex(pattern)
+        val matchResult = regex.find(url)
+        return matchResult?.groupValues?.get(1)
     }
     /*var getData =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
