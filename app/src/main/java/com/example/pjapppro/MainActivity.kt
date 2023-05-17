@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import java.lang.Exception
@@ -18,20 +19,40 @@ class MainActivity : AppCompatActivity() {
     fun btnQRscanner(view: View) {
         onScanQRcode(view)
     }
-    var getData = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        result ->
+    val getData = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
-            println("rezultati")
+            val scannedData = data?.getStringExtra("SCAN_RESULT")
+            Log.d("SCAN", "Scan results: $scannedData")
+
+            // Shranite povezavo v primeru, da je na voljo
+            val url = scannedData?.let { getUrlFromQRCode(it) }
+            Log.d("SCAN", "URL: $url")
         }
     }
+    private fun getUrlFromQRCode(scannedData: String): String? {
+        // Tukaj lahko obdelate skenirane podatke in iz njih izvlečete povezavo
+        // Predpostavimo, da skenirana povezava začne z "http://" ali "https://"
+        if (scannedData.startsWith("http://") || scannedData.startsWith("https://") || scannedData.startsWith("HTTP://") || scannedData.startsWith("HTTPS://")) {
+            return scannedData
+        }
+        return null
+    }
+    /*var getData =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                Log.d("SCAN","Scan results: ${data?.getStringExtra("SCAN_RESULT")}")
+            //println("Scan results: ${data?.getStringExtra("SCAN_RESULT")}")
+            }
+        }*/
+
     fun onScanQRcode(view: View) {
         try {
             val intent = Intent("com.google.zxing.client.android.SCAN")
             intent.putExtra("SCAN_MODE", "QR_CODE_MODE")
             getData.launch(intent)
         } catch (e: Exception) {
-            println("neuspesno")
             var marketUri = Uri.parse("market://details?id=com.google.zxing.client.android")
             val marketIntent = Intent(Intent.ACTION_VIEW, marketUri)
             startActivity(marketIntent)
