@@ -3,23 +3,17 @@ package com.example.pjapppro
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import com.android.volley.Request
+import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
-import java.lang.Exception
-import java.nio.charset.Charset
 
 
 class MainActivity : AppCompatActivity() {
@@ -70,33 +64,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun callOpenBoxAPI(apiKey: String, boxId: Int, tokenFormat: Int) {
-        val url = "https://api-d4me-stage.direct4.me/sandbox/v1/Access/openbox" // Zamenjajte z dejanskim URL-om API-ja
-        val requestQueue: RequestQueue = Volley.newRequestQueue(this) // Če kličete iz aktivnosti, prenesite kontekst
+        val url = "https://api-d4me-stage.direct4.me/sandbox/v1/Access/openbox"
+        val requestQueue: RequestQueue = Volley.newRequestQueue(this)
         val jsonObject = JSONObject()
         jsonObject.put("boxId", boxId)
         jsonObject.put("tokenFormat", tokenFormat)
         val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonObject,
             Response.Listener { response ->
-                var result = response.optInt("result")
-                //val data = response.optString("data")
-                //var errNumber = response.optInt("errNumber")
-                Log.d("api", "supercaaaa $result")
-                println("Odgovor: $response")
-                Log.d("api", "supercaaaa $response")
-                // Tukaj lahko nadaljujete z obdelavo odgovora API-ja
+                val data = response.optString("data")
+                Log.d("api", "zeton $data")
             },
             Response.ErrorListener { error ->
-                // Napaka pri izvajanju zahtevka
                 Log.e("errrrrrr", Log.getStackTraceString(error))
             }) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Bearer $apiKey"
-                headers["Content-type"] = "application/json"
+                headers["Content-Type"] = "application/json"
                 return headers
             }
         }
-
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            15000, // 10 sekund (v milisekundah)
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
         requestQueue.add(jsonObjectRequest)
     }
 
