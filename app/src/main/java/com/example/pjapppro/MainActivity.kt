@@ -130,6 +130,7 @@ class MainActivity : AppCompatActivity() {
             mediaPlayer.setDataSource(tempEntryFile.absolutePath)
             mediaPlayer.prepare()
             mediaPlayer.start()
+            Toast.makeText(applicationContext,"Predvajanje žetona", Toast.LENGTH_LONG).show();
 
             entryInputStream.close()
         }
