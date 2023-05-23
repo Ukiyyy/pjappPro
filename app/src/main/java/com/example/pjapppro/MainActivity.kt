@@ -17,6 +17,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONObject
 import java.io.File
@@ -95,6 +96,15 @@ class MainActivity : AppCompatActivity() {
                 if(data != "") {
                     decompresAndPlay(data)
                 }
+                val timestamp = FieldValue.serverTimestamp()
+                firestore.collection("openBoxTimes")
+                    .add(mapOf("time" to timestamp))
+                    .addOnSuccessListener {
+                        Log.d("Firebase", "Time stored successfully in Firebase")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Firebase", "Error storing time in Firebase: ${e.message}")
+                    }
             },
             Response.ErrorListener { error ->
                 Log.e("errrrrrr", Log.getStackTraceString(error))
@@ -141,32 +151,5 @@ class MainActivity : AppCompatActivity() {
         }
 
         zipFile.close()
-    }
-
-    fun send(view: View) {
-        val storeName = "ime"
-        val storeDesc = "opis"
-        val poz1=46.508529
-        val poz2=15.191517
-
-        val storeData = hashMapOf(
-            "imeT" to storeName,
-            "opis" to storeDesc,
-            "poz1" to poz1,
-            "poz2" to poz2,
-
-            )
-
-        firestore.collection("trgovine")
-            .add(storeData)
-            .addOnSuccessListener { documentReference ->
-                // Data added successfully
-                val storeId = documentReference.id
-                Toast.makeText(this, "Dodano uspešno", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Prišlo je do napake", Toast.LENGTH_SHORT).show()
-            }
     }
 }
