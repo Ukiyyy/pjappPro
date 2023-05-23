@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.example.pjapppro.databinding.ActivityMainBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,11 +28,22 @@ import java.util.zip.ZipFile
 
 class MainActivity : AppCompatActivity() {
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         FirebaseApp.initializeApp(this)
+
+        binding.buttonLogin.setOnClickListener {
+            val intentLogin = Intent(this, LoginActivity::class.java)
+            startActivity(intentLogin)
+        }
+        binding.buttonRegister.setOnClickListener {
+            val intentRegister = Intent(this, RegisterActivity::class.java)
+            startActivity(intentRegister)
+        }
     }
 
     fun btnQRscanner(view: View) {
@@ -154,4 +166,5 @@ class MainActivity : AppCompatActivity() {
 
         zipFile.close()
     }
+
 }
