@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                 if(data != "") {
                     decompresAndPlay(data)
                 }
+                //shrani cas v bazo
                 val timestamp = FieldValue.serverTimestamp()
                 firestore.collection("openBoxTimes")
                     .add(mapOf("time" to timestamp))
@@ -105,6 +106,7 @@ class MainActivity : AppCompatActivity() {
                     .addOnFailureListener { e ->
                         Log.e("Firebase", "Error storing time in Firebase: ${e.message}")
                     }
+                //----------
             },
             Response.ErrorListener { error ->
                 Log.e("errrrrrr", Log.getStackTraceString(error))
