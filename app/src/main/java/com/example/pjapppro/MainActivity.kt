@@ -16,6 +16,8 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -23,9 +25,12 @@ import java.util.zip.ZipFile
 
 
 class MainActivity : AppCompatActivity() {
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        FirebaseApp.initializeApp(this)
     }
 
     fun btnQRscanner(view: View) {
@@ -136,5 +141,32 @@ class MainActivity : AppCompatActivity() {
         }
 
         zipFile.close()
+    }
+
+    fun send(view: View) {
+        val storeName = "ime"
+        val storeDesc = "opis"
+        val poz1=46.508529
+        val poz2=15.191517
+
+        val storeData = hashMapOf(
+            "imeT" to storeName,
+            "opis" to storeDesc,
+            "poz1" to poz1,
+            "poz2" to poz2,
+
+            )
+
+        firestore.collection("trgovine")
+            .add(storeData)
+            .addOnSuccessListener { documentReference ->
+                // Data added successfully
+                val storeId = documentReference.id
+                Toast.makeText(this, "Dodano uspešno", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Prišlo je do napake", Toast.LENGTH_SHORT).show()
+            }
     }
 }
