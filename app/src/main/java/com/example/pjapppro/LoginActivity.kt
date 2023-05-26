@@ -1,5 +1,7 @@
 package com.example.pjapppro
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -13,6 +15,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var editTextPassword: EditText
     private lateinit var buttonLogin: Button
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin = findViewById(R.id.buttonLogin)
 
         firestore = FirebaseFirestore.getInstance()
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         buttonLogin.setOnClickListener {
             val username = editTextUsername.text.toString().trim()
@@ -46,7 +50,13 @@ class LoginActivity : AppCompatActivity() {
                     val documents = task.result?.documents
                     if (documents != null && documents.isNotEmpty()) {
                         // Login successful
+                        // Store user information in shared preference
+                        val editor = sharedPreferences.edit()
+                        editor.putString("username", username)
+                        editor.apply()
+
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
+
                         val intentOpen = Intent(this, OpenActivity::class.java)
                         startActivity(intentOpen)
                     } else {

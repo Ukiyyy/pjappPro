@@ -5,10 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pjapppro.databinding.ActivityMainBinding
 import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity: AppCompatActivity() {
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

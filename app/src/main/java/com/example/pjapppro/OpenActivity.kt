@@ -1,7 +1,9 @@
 package com.example.pjapppro
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -29,12 +31,19 @@ import java.util.zip.ZipFile
 class OpenActivity : AppCompatActivity() {
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private lateinit var binding: ActivityOpenBinding
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var username: String
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOpenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         FirebaseApp.initializeApp(this)
+
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        username = sharedPreferences.getString("username", "")?:""
 
     }
 
@@ -103,12 +112,12 @@ class OpenActivity : AppCompatActivity() {
                 //shrani cas v bazo
                 val timestamp = FieldValue.serverTimestamp()
                 firestore.collection("openBoxTimes")
-                    .add(mapOf("time" to timestamp))
+                    .add(mapOf("time" to timestamp, "username" to username))
                     .addOnSuccessListener {
-                        Log.d("Firebase", "Time stored successfully in Firebase")
+                        Log.d("Firebase", "Time and username stored successfully in Firebase")
                     }
                     .addOnFailureListener { e ->
-                        Log.e("Firebase", "Error storing time in Firebase: ${e.message}")
+                        Log.e("Firebase", "Error storing time and username in Firebase: ${e.message}")
                     }
                 //----------
             },
