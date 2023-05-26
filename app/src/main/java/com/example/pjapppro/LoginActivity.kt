@@ -1,4 +1,5 @@
 package com.example.pjapppro
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -46,7 +47,8 @@ class LoginActivity : AppCompatActivity() {
                     if (documents != null && documents.isNotEmpty()) {
                         // Login successful
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                        // You can navigate to the desired activity here
+                        val intentOpen = Intent(this, OpenActivity::class.java)
+                        startActivity(intentOpen)
                     } else {
                         // Login failed
                         Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
