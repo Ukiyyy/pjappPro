@@ -45,10 +45,19 @@ class OpenActivity : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         username = sharedPreferences.getString("username", "")?:""
 
+        binding.button.setOnClickListener {
+            val intentStatistics = Intent(this, OpendStatisticsActivity::class.java)
+            startActivity(intentStatistics)
+        }
     }
 
+
     fun btnQRscanner(view: View) {
-        onScanQRcode(view)
+        //onScanQRcode(view)
+        val code=530
+        if (code != null) {
+            callOpenBoxAPI("9ea96945-3a37-4638-a5d4-22e89fbc998f", code, 2)
+        }
     }
 
     val getData =
@@ -60,7 +69,8 @@ class OpenActivity : AppCompatActivity() {
 
                 val url = scannedData?.let { getUrlFromQRCode(it) }
                 Log.d("SCAN", "URL: $url")
-                val code = url?.let { extractCodeFromURL(it)?.toInt() }
+                //val code = url?.let { extractCodeFromURL(it)?.toInt() }
+                val code=530
                 if (code != null) {
                     callOpenBoxAPI("9ea96945-3a37-4638-a5d4-22e89fbc998f", code, 2)
                 }
