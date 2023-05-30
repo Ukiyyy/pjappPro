@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pjapppro.databinding.ActivityOpenStatisticsBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
-class OpenStatisticsActivity : AppCompatActivity() {
+class OpendStatisticsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOpenStatisticsBinding
     lateinit var app: MyApplication
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var adapter: StatisticsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,46 +23,31 @@ class OpenStatisticsActivity : AppCompatActivity() {
         app = application as MyApplication
         firestore = FirebaseFirestore.getInstance()
 
-        binding = ActivityOpenStatisticsBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        val adapter = StatisticsAdapter(app.statisticsList)
+        adapter = StatisticsAdapter(app.statisticsList)
         binding.recycler.adapter = adapter
         binding.recycler.layoutManager = LinearLayoutManager(this)
 
         loadStatisticsFromFireBase()
-
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-
-                val timeStamp = data?.getStringExtra("time")
-                val user = data?.getStringExtra("user")
-
-                app.statisticsList.add(statistics(timeStamp!!, user!!))
-                binding.recycler.adapter?.notifyDataSetChanged()
-            }
-        }
-
     }
+
     private fun loadStatisticsFromFireBase() {
         firestore.collection("openBoxTimes")
             .get()
             .addOnSuccessListener { result ->
+                app.statisticsList.clear()
                 for (document in result) {
-                    val timeStamp = document.getString("time")
+                    val timeStamp = document.getDate("time")
                     val username = document.getString("username")
 
-
                     if (timeStamp != null && username != null) {
-                        app.statisticsList.add(statistics(timeStamp, username))
+                        app.statisticsList.add(statistics(timeStamp.toString(), username))
                     }
                 }
-                binding.recycler.adapter?.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
                 Log.d("StoreActivity", "Error getting trgovine: ", exception)
             }
     }
 }
+

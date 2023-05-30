@@ -24,13 +24,6 @@ object DatabaseConnection {
 
             preparedStatement.executeUpdate()
 
-            // Get the generated ID if needed
-            val generatedKeys = preparedStatement.generatedKeys
-            if (generatedKeys.next()) {
-                val generatedId = generatedKeys.getLong(1)
-                // Use the generated ID if necessary
-            }
-
             preparedStatement.close()
         } finally {
             connection.close()

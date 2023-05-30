@@ -6,12 +6,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.RequestQueue
@@ -25,7 +27,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 import java.util.zip.ZipFile
+import kotlin.collections.HashMap
 
 
 class OpenActivity : AppCompatActivity() {
@@ -33,8 +42,6 @@ class OpenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOpenBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var username: String
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +119,8 @@ class OpenActivity : AppCompatActivity() {
         val jsonObject = JSONObject()
         jsonObject.put("boxId", boxId)
         jsonObject.put("tokenFormat", tokenFormat)
-        val jsonObjectRequest = object : JsonObjectRequest(Method.POST, url, jsonObject,
+        val jsonObjectRequest = @RequiresApi(Build.VERSION_CODES.O)
+        object : JsonObjectRequest(Method.POST, url, jsonObject,
             Response.Listener { response ->
                 val data = response.optString("data")
                 Log.d("api", "zeton $data")
@@ -129,6 +137,7 @@ class OpenActivity : AppCompatActivity() {
                     .addOnFailureListener { e ->
                         Log.e("Firebase", "Error storing time and username in Firebase: ${e.message}")
                     }
+               insert()
                 //----------
             },
             Response.ErrorListener { error ->
@@ -176,6 +185,41 @@ class OpenActivity : AppCompatActivity() {
         }
 
         zipFile.close()
+    }
+    fun getConnection(url:String,password:String,username:String): Connection? {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance()
+            return DriverManager.getConnection(url, username, password)
+            //val c = DriverManager.getConnection("jdbc:mysql://${dbCredentials.url}", dbCredentials.user,dbCredentials.pass)
+            //println(c.isValid(0))
+        } catch (e: SQLException) {
+            println("${e.javaClass.simpleName} ${e.message}")
+            //e.printStackTrace()
+        } catch (e: Exception) {
+            println("${e.javaClass.simpleName} ${e.message}")
+        }
+        return null
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun insert(): Boolean {
+        //val jsonstr: String = File("./src/jvmMain/kotlin/data/db/config.json").readText(Charsets.UTF_8)
+        //val c = Json.decodeFromString<DbCredentials>(jsonstr)
+        val conn =getConnection("sql7.freemysqlhosting.net","syRmuGc8Zd","sql7620703") ?: return true
+        conn.use {
+            try {
+                Log.e("blabla","ashdashdashldhasjkd")
+                val select = it.prepareStatement("INSERT INTO logs (date,userid,paketnikid) VALUES (?,?,?)")
+
+                select.setObject(1, LocalDate.now())
+                select.setInt(2, 1)
+                select.setInt(3, 1)
+
+                var rs = select.executeUpdate() //insert update
+            } catch (ex: SQLException) {
+                println(ex.message)
+            }
+        }
+        return true
     }
 
 }

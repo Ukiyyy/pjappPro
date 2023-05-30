@@ -13,7 +13,6 @@ class StatisticsAdapter(private val data: MutableList<statistics>): RecyclerView
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val timeStamp: TextView = itemView.findViewById(R.id.timeStamp)
         val user: TextView = itemView.findViewById(R.id.username)
-        val cardView: CardView = itemView.findViewById(R.id.cardviewLine)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.card_open_statistics, parent, false)
