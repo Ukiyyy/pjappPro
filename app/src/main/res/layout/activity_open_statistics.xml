@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/diagonal_background"
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@
         android:layout_marginTop="48dp"
         android:text="Casi odprtja paketnika"
         android:textSize="30dp"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
