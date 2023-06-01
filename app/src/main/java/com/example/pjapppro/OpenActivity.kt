@@ -56,6 +56,11 @@ class OpenActivity : AppCompatActivity() {
             val intentStatistics = Intent(this, OpendStatisticsActivity::class.java)
             startActivity(intentStatistics)
         }
+
+        binding.mapButten.setOnClickListener {
+            val intentStatistics = Intent(this, MapsActivity::class.java)
+            startActivity(intentStatistics)
+        }
     }
 
 
