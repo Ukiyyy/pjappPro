@@ -24,7 +24,6 @@ class MapsActivity : AppCompatActivity(){
     private lateinit var binding: ActivityMapBinding
     lateinit var app: MyApplication
 
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     lateinit var mapFragment: SupportMapFragment
     lateinit var googleMap: GoogleMap
@@ -59,14 +58,7 @@ class MapsActivity : AppCompatActivity(){
                     googleMap.animateCamera(cameraUpdate)
                 }
             }
-/*
-            for(trgovina in app.trgovine) {
-                val location1 = LatLng(trgovina.pozicija1, trgovina.pozicija2)
-                googleMap.addMarker(MarkerOptions().position(location1).title(trgovina.imeT))
-                googleMap.setOnInfoWindowLongClickListener(this)
-            }
 
- */
 
         })
         binding.btnExit.setOnClickListener(){
