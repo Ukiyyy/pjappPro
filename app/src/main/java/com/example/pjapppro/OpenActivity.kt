@@ -61,6 +61,8 @@ class OpenActivity : AppCompatActivity() {
             val intentStatistics = Intent(this, MapsActivity::class.java)
             startActivity(intentStatistics)
         }
+
+
     }
 
 
@@ -161,6 +163,12 @@ class OpenActivity : AppCompatActivity() {
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
         requestQueue.add(jsonObjectRequest)
+
+
+        val intentMaps = Intent(this, MapsActivity::class.java)
+        intentMaps.putExtra("latitude", 46.55905209762168)
+        intentMaps.putExtra("longitude", 15.63805034247499)
+        startActivity(intentMaps)
     }
     fun decompresAndPlay(getapi: String) {
         val decodedBytes = Base64.decode(getapi, Base64.DEFAULT)
