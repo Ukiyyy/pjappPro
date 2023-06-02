@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -35,6 +36,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.btnExit.setOnClickListener {
             finish()
         }
+
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -42,6 +45,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (isLocationPermissionGranted()) {
             initializeMap()
+            val latitude = intent.getDoubleExtra("latitude", 0.0)
+            val longitude = intent.getDoubleExtra("longitude", 0.0)
+            if (latitude != 0.0 && longitude != 0.0) {
+                addMarkerFromIntent()
+            }
         } else {
             requestLocationPermission()
         }
@@ -84,4 +92,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             e.printStackTrace()
         }
     }
+
+    private fun addMarkerFromIntent() {
+        val latitude = intent.getDoubleExtra("latitude", 0.0)
+        val longitude = intent.getDoubleExtra("longitude", 0.0)
+
+        if (latitude != 0.0 && longitude != 0.0) {
+            val latLng = LatLng(latitude, longitude)
+            val marker = MarkerOptions().position(latLng).title("Poskus odklepanja")
+            googleMap.addMarker(marker)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f))
+        }
+    }
+
+
 }
