@@ -82,10 +82,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
+                    /*
                     val latLng = LatLng(location.latitude, location.longitude)
                     val markerOptions = MarkerOptions().position(latLng).title("Trenutna lokacija")
                     googleMap.addMarker(markerOptions)
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                    */
                 }
             }
         } catch (e: SecurityException) {

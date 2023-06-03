@@ -37,17 +37,43 @@ import java.util.zip.ZipFile
 import kotlin.collections.HashMap
 
 
+
+
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+
+
 class OpenActivity : AppCompatActivity() {
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private lateinit var binding: ActivityOpenBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var username: String
 
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val locationPermissionCode = 1
+
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 100
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOpenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         FirebaseApp.initializeApp(this)
+
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
 
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         username = sharedPreferences.getString("username", "")?:""
@@ -61,6 +87,9 @@ class OpenActivity : AppCompatActivity() {
             val intentStatistics = Intent(this, MapsActivity::class.java)
             startActivity(intentStatistics)
         }
+
+
+
 
 
     }
@@ -165,10 +194,18 @@ class OpenActivity : AppCompatActivity() {
         requestQueue.add(jsonObjectRequest)
 
 
-        val intentMaps = Intent(this, MapsActivity::class.java)
-        intentMaps.putExtra("latitude", 46.55905209762168)
-        intentMaps.putExtra("longitude", 15.63805034247499)
-        startActivity(intentMaps)
+        getCurrentLocation { location ->
+            location?.let {
+                val latitude = location.first
+                val longitude = location.second
+                Log.i("LOCATION", "Latitude: $latitude, Longitude: $longitude")
+
+                val intentStatistics = Intent(this, MapsActivity::class.java)
+                intentStatistics.putExtra("latitude", latitude)
+                intentStatistics.putExtra("longitude", longitude)
+                startActivity(intentStatistics)
+            }
+        }
     }
     fun decompresAndPlay(getapi: String) {
         val decodedBytes = Base64.decode(getapi, Base64.DEFAULT)
@@ -234,5 +271,77 @@ class OpenActivity : AppCompatActivity() {
         }
         return true
     }
+
+
+
+
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            locationPermissionCode
+        )
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    getCurrentLocation { location ->
+                        location?.let {
+                            val latitude = location.first
+                            val longitude = location.second
+                            Log.i("LOCATION", "Latitude: $latitude, Longitude: $longitude")
+
+                            val intentStatistics = Intent(this, MapsActivity::class.java)
+                            intentStatistics.putExtra("latitude", latitude)
+                            intentStatistics.putExtra("longitude", longitude)
+                            startActivity(intentStatistics)
+                        }
+                    }
+                } else {
+                    // Permission denied
+                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+    private fun getCurrentLocation(callback: (Pair<Double, Double>?) -> Unit) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission not granted, request it
+            requestLocationPermission()
+            callback(null)
+        } else {
+            // Permission already granted, get the location
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    location?.let {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        callback(Pair(latitude, longitude))
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("LOCATION", "Error getting location: ${e.message}")
+                    callback(null)
+                }
+        }
+    }
+
+
 
 }
