@@ -23,6 +23,7 @@ import java.util.*
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapBinding
     private lateinit var googleMap: GoogleMap
+    lateinit var app: MyApplication
 
     private val REQUEST_CODE_PERMISSION = 1
 
@@ -78,26 +79,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initializeMap() {
+
+
+        app = application as MyApplication
+
+        for (i in app.markerList) {
+
+            Log.i("MARKER", "${i.ime}, ${i.latitude}, ${i.longitude}")
+            val latLng = LatLng(i.latitude, i.longitude)
+            val markerOptions = MarkerOptions().position(latLng).title("${i.ime}")
+            googleMap.addMarker(markerOptions)
+        }
+
+
+
         try {
             googleMap.isMyLocationEnabled = true
 
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
-                    /*
+
                     val latLng = LatLng(location.latitude, location.longitude)
-                    val markerOptions = MarkerOptions().position(latLng).title("Trenutna lokacija")
-                    googleMap.addMarker(markerOptions)
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-                    */
+
                 }
             }
         } catch (e: SecurityException) {
             e.printStackTrace()
         }
+
     }
 
     private fun addMarkerFromIntent() {
+
+
+        app = application as MyApplication
         val latitude = intent.getDoubleExtra("latitude", 0.0)
         val longitude = intent.getDoubleExtra("longitude", 0.0)
 
@@ -106,8 +123,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
             val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
             val marker = MarkerOptions().position(latLng).title("Poskus odklepanja ob $currentTime, $currentDate")
+            val title:String = "Poskus odklepanja ob $currentTime, $currentDate"
             googleMap.addMarker(marker)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f))
+
+            app.markerList.add(markerji(title,latitude,longitude))
         }
     }
 

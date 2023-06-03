@@ -6,4 +6,6 @@ class MyApplication: Application() {
 
     var statisticsList = mutableListOf<statistics>()
 
+    var markerList = mutableListOf<markerji>()
+
 }
