@@ -88,6 +88,11 @@ class OpenActivity : AppCompatActivity() {
             startActivity(intentStatistics)
         }
 
+        binding.buttonLogOut.setOnClickListener {
+            val intentStatistics = Intent(this, MainActivity::class.java)
+            startActivity(intentStatistics)
+        }
+
 
 
 

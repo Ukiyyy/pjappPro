@@ -17,6 +17,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapBinding
@@ -101,7 +103,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         if (latitude != 0.0 && longitude != 0.0) {
             val latLng = LatLng(latitude, longitude)
-            val marker = MarkerOptions().position(latLng).title("Poskus odklepanja")
+            val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+            val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
+            val marker = MarkerOptions().position(latLng).title("Poskus odklepanja ob $currentTime, $currentDate")
             googleMap.addMarker(marker)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f))
         }
