@@ -1,6 +1,7 @@
 package com.example.pjapppro
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
@@ -102,9 +103,9 @@ class FAActivity : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Verification successful, do something
                     Toast.makeText(this@FAActivity, "Verification successful", Toast.LENGTH_SHORT).show()
-                    // Continue with your desired actions after successful verification
+                    val intentOpen = Intent(this, FAActivity::class.java)
+                    startActivity(intentOpen)
                 } else {
                     // Verification failed, show error message
                     Toast.makeText(this@FAActivity, "Verification failed", Toast.LENGTH_SHORT).show()

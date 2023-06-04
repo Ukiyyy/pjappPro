@@ -35,19 +35,35 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // Create a new user document in Firestore
-        val user: MutableMap<String, Any> = HashMap()
-        user["username"] = username
-        user["phoneNumber"] = phoneNumber
-        user["password"] = password
+        // Check if username already exists in Firestore
         firestore!!.collection("users")
-            .add(user)
-            .addOnSuccessListener { documentReference: DocumentReference? ->
-                Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
-                finish()
+            .whereEqualTo("username", username)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    // Username doesn't exist, create a new user document in Firestore
+                    val user: MutableMap<String, Any> = HashMap()
+                    user["username"] = username
+                    user["phoneNumber"] = phoneNumber
+                    user["password"] = password
+                    firestore!!.collection("users")
+                        .add(user)
+                        .addOnSuccessListener { documentReference: DocumentReference? ->
+                            Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                        .addOnFailureListener { e: Exception ->
+                            Log.e("Firebase", "Error registering user: " + e.message)
+                            Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                } else {
+                    // Username already exists
+                    Toast.makeText(this, "Username already exists. Please choose a different username.", Toast.LENGTH_SHORT).show()
+                }
             }
             .addOnFailureListener { e: Exception ->
-                Log.e("Firebase", "Error registering user: " + e.message)
+                Log.e("Firebase", "Error checking username: " + e.message)
                 Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT)
                     .show()
             }
