@@ -92,13 +92,7 @@ class OpenActivity : AppCompatActivity() {
             val intentStatistics = Intent(this, MainActivity::class.java)
             startActivity(intentStatistics)
         }
-
-
-
-
-
     }
-
 
     fun btnQRscanner(view: View) {
         //onScanQRcode(view)
@@ -178,7 +172,6 @@ class OpenActivity : AppCompatActivity() {
                     .addOnFailureListener { e ->
                         Log.e("Firebase", "Error storing time and username in Firebase: ${e.message}")
                     }
-               insert()
                 //----------
             },
             Response.ErrorListener { error ->
@@ -255,29 +248,6 @@ class OpenActivity : AppCompatActivity() {
         }
         return null
     }
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun insert(): Boolean {
-        //val jsonstr: String = File("./src/jvmMain/kotlin/data/db/config.json").readText(Charsets.UTF_8)
-        //val c = Json.decodeFromString<DbCredentials>(jsonstr)
-        val conn =getConnection("sql7.freemysqlhosting.net","syRmuGc8Zd","sql7620703") ?: return true
-        conn.use {
-            try {
-                Log.e("blabla","ashdashdashldhasjkd")
-                val select = it.prepareStatement("INSERT INTO logs (date,userid,paketnikid) VALUES (?,?,?)")
-
-                select.setObject(1, LocalDate.now())
-                select.setInt(2, 1)
-                select.setInt(3, 1)
-
-                var rs = select.executeUpdate() //insert update
-            } catch (ex: SQLException) {
-                println(ex.message)
-            }
-        }
-        return true
-    }
-
-
 
 
     private fun requestLocationPermission() {

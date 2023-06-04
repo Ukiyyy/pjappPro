@@ -12,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class RegisterActivity : AppCompatActivity() {
     private var firestore: FirebaseFirestore? = null
     private var editTextUsername: EditText? = null
-    private var editTextEmail: EditText? = null
+    private var editTextPhoneNumber: EditText? = null
     private var editTextPassword: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,17 +20,17 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
         firestore = FirebaseFirestore.getInstance()
         editTextUsername = findViewById(R.id.editTextUsername)
-        editTextEmail = findViewById(R.id.editTextEmail)
+        editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber)
         editTextPassword = findViewById(R.id.editTextPassword)
     }
 
     fun onRegister(view: View?) {
         val username = editTextUsername!!.text.toString().trim { it <= ' ' }
-        val email = editTextEmail!!.text.toString().trim { it <= ' ' }
+        val phoneNumber = editTextPhoneNumber!!.text.toString().trim { it <= ' ' }
         val password = editTextPassword!!.text.toString().trim { it <= ' ' }
 
         // Validate the input fields
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || phoneNumber.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return
         }
@@ -38,7 +38,7 @@ class RegisterActivity : AppCompatActivity() {
         // Create a new user document in Firestore
         val user: MutableMap<String, Any> = HashMap()
         user["username"] = username
-        user["email"] = email
+        user["phoneNumber"] = phoneNumber
         user["password"] = password
         firestore!!.collection("users")
             .add(user)

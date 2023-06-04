@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pjapppro.databinding.ActivityOpenStatisticsBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class OpendStatisticsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOpenStatisticsBinding
@@ -32,6 +33,7 @@ class OpendStatisticsActivity : AppCompatActivity() {
 
     private fun loadStatisticsFromFireBase() {
         firestore.collection("openBoxTimes")
+            .orderBy("time", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 app.statisticsList.clear()

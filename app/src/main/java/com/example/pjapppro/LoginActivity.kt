@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pjapppro.R
 import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
@@ -57,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
 
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
 
-                        val intentOpen = Intent(this, OpenActivity::class.java)
+                        val intentOpen = Intent(this, FAActivity::class.java)
                         startActivity(intentOpen)
                     } else {
                         // Login failed
