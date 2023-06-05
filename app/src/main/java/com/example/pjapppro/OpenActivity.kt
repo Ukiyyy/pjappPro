@@ -42,6 +42,7 @@ import kotlin.collections.HashMap
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
+import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -95,11 +96,16 @@ class OpenActivity : AppCompatActivity() {
     }
 
     fun btnQRscanner(view: View) {
-        //onScanQRcode(view)
+       onScanQRcode(view)
+        /*
         val code=530
         if (code != null) {
             callOpenBoxAPI("9ea96945-3a37-4638-a5d4-22e89fbc998f", code, 2)
         }
+
+         */
+
+
     }
 
     val getData =
@@ -125,6 +131,7 @@ class OpenActivity : AppCompatActivity() {
                 "HTTP://"
             ) || scannedData.startsWith("HTTPS://")
         ) {
+            Log.d("lalala", scannedData)
             return scannedData
         }
         return null
@@ -139,11 +146,11 @@ class OpenActivity : AppCompatActivity() {
 
     fun onScanQRcode(view: View) {
         try {
-            val intent = Intent("com.google.zxing.client.android.SCAN")
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             intent.putExtra("SCAN_MODE", "QR_CODE_MODE")
             getData.launch(intent)
         } catch (e: Exception) {
-            var marketUri = Uri.parse("market://details?id=com.google.zxing.client.android")
+            var marketUri = Uri.parse("market://details?id=com.intsig.camscanner")
             val marketIntent = Intent(Intent.ACTION_VIEW, marketUri)
             startActivity(marketIntent)
         }
