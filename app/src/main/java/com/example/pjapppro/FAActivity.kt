@@ -104,7 +104,7 @@ class FAActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this@FAActivity, "Verification successful", Toast.LENGTH_SHORT).show()
-                    val intentOpen = Intent(this, FAActivity::class.java)
+                    val intentOpen = Intent(this, OpenActivity::class.java)
                     startActivity(intentOpen)
                 } else {
                     // Verification failed, show error message
