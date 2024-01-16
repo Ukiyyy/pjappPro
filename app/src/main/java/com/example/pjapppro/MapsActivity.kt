@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.pjapppro.databinding.ActivityMapBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -58,32 +60,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         loadCitiesFromFile()
 
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_cities)
+
+        // Create an Adapter and set it to the RecyclerView
+        val adapter = CityAdapter(cities.take(10)) // Pass the first 10 cities to the adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
         binding.btnCalculatePath.setOnClickListener {
             val selectedRadioButtonId = binding.radioGroupOptions.checkedRadioButtonId
 
             when (selectedRadioButtonId) {
                 R.id.radio_time -> {
-                    // Calculate path based on time
                     calculatePathBasedOnTime()
                 }
                 R.id.radio_length -> {
-                    // Calculate path based on journey length
                     calculatePathBasedOnLength()
                 }
                 else -> {
-                    // Handle the case where no radio button is selected
                     Toast.makeText(this, "Please select an option.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-
-        /*
-        Log.d("MapsActivity", "Before initializing TSP and GA")
-        val tsp = TSP(readDistanceMatrix(), 1000)
-        val ga = GA(100, 0.8, 0.1)
-        var currentBestPath: TSP.Tour? = null
-        Log.d("MapsActivity", "TSP and GA initialized")
-        */
     }
 
     private fun resetState() {
