@@ -56,10 +56,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        binding.btnExit.setOnClickListener {
-            finish()
-        }
         loadCitiesFromFile()
+
+        binding.btnCalculatePath.setOnClickListener {
+            val selectedRadioButtonId = binding.radioGroupOptions.checkedRadioButtonId
+
+            when (selectedRadioButtonId) {
+                R.id.radio_time -> {
+                    // Calculate path based on time
+                    calculatePathBasedOnTime()
+                }
+                R.id.radio_length -> {
+                    // Calculate path based on journey length
+                    calculatePathBasedOnLength()
+                }
+                else -> {
+                    // Handle the case where no radio button is selected
+                    Toast.makeText(this, "Please select an option.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         /*
         Log.d("MapsActivity", "Before initializing TSP and GA")
         val tsp = TSP(readDistanceMatrix(), 1000)
@@ -69,16 +86,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         */
     }
 
-    private fun readDistanceMatrix(): String {
-        return try {
-            val content = assets.open("distance_matrix.txt").bufferedReader().use { it.readText() }
-            Log.d("MapsActivity", "File Content: $content")  // Log the file content
-            content
-        } catch (e: IOException) {
-            e.printStackTrace()
-            "" // Return an empty string or handle the error appropriately
-        }
+    private fun resetState() {
+        iteration = 0
+        newPathFound = false
+        currentPolyline?.remove()
     }
+
 
     private fun updateMap(fromIndex: Int, toIndex: Int) {
         // Clear the existing polyline
@@ -94,6 +107,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // Draw the new polyline on the map
             currentPolyline = googleMap.addPolyline(polylineOptions)
+        }
+    }
+
+    private fun calculatePathBasedOnTime() {
+        resetState()
+        val path = "duration_matrix.txt" // Replace with the actual file path for time-based calculation
+        while (iteration < maxIterations) {
+            Log.d("MapsActivity", "Inside while loop, iteration: $iteration")
+            val tsp = TSP(this, path, 1000)
+            val ga = GA(100, 0.8, 0.1)
+            val bestPath: TSP.Tour? = ga.execute(tsp)
+            if (bestPath != null){
+                newPathFound = true
+                val maxX = tsp.getCities().maxOfOrNull { it.x }?.toInt() ?: 1
+                val maxY = tsp.getCities().maxOfOrNull { it.y }?.toInt() ?: 1
+                Log.d("MapsActivity", "New path found: $newPathFound, maxX: $maxX, maxY: $maxY")
+                updateMap(maxX, maxY)
+            }
+            iteration++
+        }
+    }
+
+    private fun calculatePathBasedOnLength() {
+        resetState()
+        val path = "distance_matrix.txt"
+        while (iteration < maxIterations) {
+            Log.d("MapsActivity", "Inside while loop, iteration: $iteration")
+            val tsp = TSP(this, path, 1000)
+            val ga = GA(100, 0.8, 0.1)
+            val bestPath: TSP.Tour? = ga.execute(tsp)
+            if (bestPath != null){
+                newPathFound = true
+                val maxX = tsp.getCities().maxOfOrNull { it.x }?.toInt() ?: 1
+                val maxY = tsp.getCities().maxOfOrNull { it.y }?.toInt() ?: 1
+                Log.d("MapsActivity", "New path found: $newPathFound, maxX: $maxX, maxY: $maxY")
+                updateMap(maxX, maxY)
+            }
+            iteration++
         }
     }
 
@@ -148,22 +199,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         createMarkersForCities()
         connectCitiesInOrder()
-
-        while (iteration < maxIterations) {
-            Log.d("MapsActivity", "Inside while loop, iteration: $iteration")
-            val tsp = TSP(this, "distance_matrix.txt", 1000)
-            val ga = GA(100, 0.8, 0.1)
-            val bestPath: TSP.Tour? = ga.execute(tsp)
-            if (bestPath != null){
-                newPathFound = true
-                val maxX = tsp.getCities().maxOfOrNull { it.x }?.toInt() ?: 1
-                val maxY = tsp.getCities().maxOfOrNull { it.y }?.toInt() ?: 1
-                Log.d("MapsActivity", "New path found: $newPathFound, maxX: $maxX, maxY: $maxY")
-                updateMap(maxX, maxY)
-            }
-            iteration++
-        }
-        Log.d("MapsActivity", "After while loop")
 
         if (isLocationPermissionGranted()) {
             initializeMap()

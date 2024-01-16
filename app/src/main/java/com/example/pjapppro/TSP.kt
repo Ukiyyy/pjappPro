@@ -164,12 +164,14 @@ class TSP(private val context: Context, path: String, maxEvaluations: Int) {
 
         for (i in 0..<numberOfCities) {
             val line = br.readLine().trim().split("\\s+".toRegex())
+            Log.d("TSP", "Read line: $line")
             val city = City()
             city.index = i // Nastavite indeks mesta
             (cities as ArrayList<City>).add(city) // Dodajte mesto v seznam
 
             for (j in 0..<numberOfCities) {
                 weights[i][j] = line[j].toDouble()
+                Log.d("TSP", "City $i to $j weight: ${weights[i][j]}")
             }
         }
 
