@@ -3,7 +3,10 @@ package com.example.pjapppro
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,6 +35,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapBinding
     private lateinit var googleMap: GoogleMap
     lateinit var app: MyApplication
+
+    private val handler = Handler(Looper.getMainLooper()) // Handler for UI updates
+    private var iteration = 0
+    private val maxIterations = 1000
+    private var newPathFound = false
+
+    val cities = mutableListOf<CityJson>()
+    private var currentPolyline: Polyline? = null
 
     private val REQUEST_CODE_PERMISSION = 1
 
@@ -48,10 +60,45 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             finish()
         }
         loadCitiesFromFile()
+        /*
+        Log.d("MapsActivity", "Before initializing TSP and GA")
+        val tsp = TSP(readDistanceMatrix(), 1000)
+        val ga = GA(100, 0.8, 0.1)
+        var currentBestPath: TSP.Tour? = null
+        Log.d("MapsActivity", "TSP and GA initialized")
+        */
     }
+
+    private fun readDistanceMatrix(): String {
+        return try {
+            val content = assets.open("distance_matrix.txt").bufferedReader().use { it.readText() }
+            Log.d("MapsActivity", "File Content: $content")  // Log the file content
+            content
+        } catch (e: IOException) {
+            e.printStackTrace()
+            "" // Return an empty string or handle the error appropriately
+        }
+    }
+
+    private fun updateMap(fromIndex: Int, toIndex: Int) {
+        // Clear the existing polyline
+        currentPolyline?.remove()
+
+        if (cities.size > fromIndex && cities.size > toIndex) {
+            val polylineOptions = PolylineOptions().apply {
+                color(Color.BLUE) // Set the color of the polyline
+                width(5f)        // Set the width of the polyline
+                add(LatLng(cities[fromIndex].latitude, cities[fromIndex].longitude)) // Start point
+                add(LatLng(cities[toIndex].latitude, cities[toIndex].longitude))     // End point
+            }
+
+            // Draw the new polyline on the map
+            currentPolyline = googleMap.addPolyline(polylineOptions)
+        }
+    }
+
     private fun loadCitiesFromFile() {
         val jsonString: String
-        val cities = mutableListOf<CityJson>()
 
         try {
             val jsonString = assets.open("location_data.json").bufferedReader().use { it.readText() }
@@ -64,46 +111,59 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val address = jsonObject.getString("naslov")
 
                 cities.add(CityJson(address, latitude, longitude))
-                runTSPAndLogResults()
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
 
-    private suspend fun findBestTSPPath(): List<TSP.City> {
-        var bestTour: TSP.Tour? = null
-        for (i in 0..100) {
-            val eilTsp = TSP("distance_matrix.txt", 1000)
-            val ga = GA(100, 0.8, 0.1)
-            val currentTour = ga.execute(eilTsp)
-            if (bestTour == null || (currentTour != null && currentTour.distance < bestTour.distance)) {
-                bestTour = currentTour
+    private fun createMarkersForCities() {
+        cities.take(10).forEach { city ->
+            val latLng = LatLng(city.latitude, city.longitude)
+            val markerOptions = MarkerOptions().position(latLng).title(city.address)
+            googleMap.addMarker(markerOptions)
+        }
+    }
+
+    private fun connectCitiesInOrder() {
+        if (cities.size > 1) {
+            val polylineOptions = PolylineOptions().apply {
+                color(Color.BLUE) // Set the color of the polyline
+                width(5f)        // Set the width of the polyline
             }
-        }
-        // Assuming bestTour's path is an array of TSP.City
-        return bestTour?.getPath()?.filterNotNull() ?: emptyList()
-    }
 
-    private fun runTSPAndLogResults() {
-        // Running in a background thread
-        GlobalScope.launch(Dispatchers.IO) {
-            val bestPath = findBestTSPPath()
-            // Log the results
-            logTSPResults(bestPath)
-        }
-    }
+            // Add points to the polyline for the first 10 cities
+            cities.take(10).forEach { city ->
+                polylineOptions.add(LatLng(city.latitude, city.longitude))
+            }
 
-    private fun logTSPResults(path: List<TSP.City>) {
-        // Log the results
-        for (city in path) {
-            Log.d("TSPResult", "City ${city.index}: x = ${city.x}, y = ${city.y}")
+            // Add the polyline to the map
+            googleMap.addPolyline(polylineOptions)
         }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         Log.d("MapsActivity", "Map is ready.")
+
+        createMarkersForCities()
+        connectCitiesInOrder()
+
+        while (iteration < maxIterations) {
+            Log.d("MapsActivity", "Inside while loop, iteration: $iteration")
+            val tsp = TSP(this, "distance_matrix.txt", 1000)
+            val ga = GA(100, 0.8, 0.1)
+            val bestPath: TSP.Tour? = ga.execute(tsp)
+            if (bestPath != null){
+                newPathFound = true
+                val maxX = tsp.getCities().maxOfOrNull { it.x }?.toInt() ?: 1
+                val maxY = tsp.getCities().maxOfOrNull { it.y }?.toInt() ?: 1
+                Log.d("MapsActivity", "New path found: $newPathFound, maxX: $maxX, maxY: $maxY")
+                updateMap(maxX, maxY)
+            }
+            iteration++
+        }
+        Log.d("MapsActivity", "After while loop")
 
         if (isLocationPermissionGranted()) {
             initializeMap()

@@ -1,12 +1,14 @@
 package com.example.pjapppro
 
+import android.content.Context
+import android.util.Log
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 @OptIn(kotlin.ExperimentalStdlibApi::class)
-class TSP(path: String, maxEvaluations: Int) {
+class TSP(private val context: Context, path: String, maxEvaluations: Int) {
     enum class DistanceType {
         EUCLIDEAN,
         WEIGHTED
@@ -66,7 +68,6 @@ class TSP(path: String, maxEvaluations: Int) {
         loadData(path)
         numberOfEvaluations = 0
         this.maxEvaluations = maxEvaluations
-        //printCityCoordinates()
     }
     /*
     private fun printCityCoordinates() {
@@ -87,9 +88,10 @@ class TSP(path: String, maxEvaluations: Int) {
         }
         tour.distance = distance
         numberOfEvaluations++
+        //Log.d("TSP", "Total tour distance: $distance")
     }
     private fun calculateDistance(from: City?, to: City?): Double {
-        if (from == null || to == null)
+        if (from == null || to == null || from.index == to.index)
             return Double.MAX_VALUE
 
         return when (distanceType) {
@@ -108,46 +110,40 @@ class TSP(path: String, maxEvaluations: Int) {
                 continue
             tour.setCity(i, shuffledCities[i])
         }
+        //Log.d("TSP", "Generated tour: ${tour.getPath().joinToString { "${it?.index}" }}")
         return tour
     }
     private fun loadData(path: String) {
-        //TODO read and set number of cities
-        val inputStream = TSP::class.java.getClassLoader().getResourceAsStream(path)
-        if (inputStream == null) {
-            System.err.println("File $path not found!")
-            return
-        }
-        var edgeWeightType: String? = null
-        var edgeWeightFormat: String? = null
-
+        val assetManager = context.assets
         try {
-            BufferedReader(InputStreamReader(inputStream)).use { br ->
-                var line: String?
-                while (br.readLine().also { line = it } != null) {
-                    when {
-                        line!!.startsWith("EDGE_WEIGHT_TYPE") -> edgeWeightType = line!!.split(":")[1].trim()
-                        line!!.startsWith("EDGE_WEIGHT_FORMAT") -> edgeWeightFormat = line!!.split(":")[1].trim()
-                        line!!.startsWith("DIMENSION") -> numberOfCities = line!!.split(":")[1].trim().toInt()
-                        line!!.startsWith("EDGE_WEIGHT_SECTION") || line!!.startsWith("NODE_COORD_SECTION") -> break                    }
-                }
-                /*when (edgeWeightType) {
-                    "EXPLICIT" -> parseExplicitWeights(br)
-                    "EUC_2D" -> parseEuc2dCoords(br)
-                }*/
-                when (edgeWeightType) {
-                    "EXPLICIT" -> {
-                        parseExplicitWeights(br)
-                        distanceType = DistanceType.WEIGHTED
-                        //start = weights[0][0]
+            assetManager.open(path).use { inputStream ->
+                BufferedReader(InputStreamReader(inputStream)).use { br ->
+                    var line: String?
+                    var edgeWeightType: String? = null
+                    var edgeWeightFormat: String? = null
+
+                    while (br.readLine().also { line = it } != null) {
+                        //Log.d("TSP", "Read line: $line")
+                        when {
+                            line!!.startsWith("EDGE_WEIGHT_TYPE") -> edgeWeightType = line!!.split(":")[1].trim()
+                            line!!.startsWith("EDGE_WEIGHT_FORMAT") -> edgeWeightFormat = line!!.split(":")[1].trim()
+                            line!!.startsWith("DIMENSION") -> numberOfCities = line!!.split(":")[1].trim().toInt()
+                            line!!.startsWith("EDGE_WEIGHT_SECTION") || line!!.startsWith("NODE_COORD_SECTION") -> break
+                        }
                     }
-                    "EUC_2D" -> {
-                        parseEuc2dCoords(br)
-                        distanceType = DistanceType.EUCLIDEAN
-                        start = cities[0]
+
+                    when (edgeWeightType) {
+                        "EXPLICIT" -> {
+                            parseExplicitWeights(br)
+                            distanceType = DistanceType.WEIGHTED
+                        }
+                        "EUC_2D" -> {
+                            parseEuc2dCoords(br)
+                            distanceType = DistanceType.EUCLIDEAN
+                        }
                     }
                 }
             }
-            //start = cities[0]
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -192,6 +188,7 @@ class TSP(path: String, maxEvaluations: Int) {
             //println(city.index)
             (cities as ArrayList<City>).add(city)
             //println(cities[i])
+            Log.d("TSP", "Parsed City ${city.index}: x = ${city.x}, y = ${city.y}")
         }
     }
 
