@@ -56,6 +56,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
 
     //implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'com.quickbirdstudios:opencv-contrib:3.4.15'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     implementation 'androidx.core:core-ktx:1.8.0'

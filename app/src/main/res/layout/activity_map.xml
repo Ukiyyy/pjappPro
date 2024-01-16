@@ -10,21 +10,53 @@
         android:id="@+id/btn_exit"
         android:layout_width="98dp"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="284dp"
+        android:layout_marginStart="16dp"
         android:text="Exit"
         android:textSize="17dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- RecyclerView for city selection -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_cities"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_exit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- RadioGroup for time and journey length selection -->
+    <RadioGroup
+        android:id="@+id/radio_group_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_cities"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/radio_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"/>
+
+        <RadioButton
+            android:id="@+id/radio_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Journey Length"/>
+    </RadioGroup>
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_options"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

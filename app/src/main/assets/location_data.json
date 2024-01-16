@@ -1,0 +1,754 @@
+[
+    {
+        "\u0161tevilka mesta": "1104",
+        "naslov": "Ljubljana Poljanski nasip 30",
+        "koordinate": {
+            "lat": 46.0507254,
+            "lng": 14.5150591
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1106",
+        "naslov": "Ljubljana Pra\u017eakova ulica 3",
+        "koordinate": {
+            "lat": 46.05696649999999,
+            "lng": 14.5067325
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1110",
+        "naslov": "Ljubljana Zalo\u0161ka cesta 57",
+        "koordinate": {
+            "lat": 46.0562923,
+            "lng": 14.5347293
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1113",
+        "naslov": "Ljubljana Dunajska cesta 141",
+        "koordinate": {
+            "lat": 46.0801744,
+            "lng": 14.5123278
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1115",
+        "naslov": "Ljubljana Riharjeva ulica 38",
+        "koordinate": {
+            "lat": 46.0392501,
+            "lng": 14.4994614
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1117",
+        "naslov": "Ljubljana Vodnikova cesta 235",
+        "koordinate": {
+            "lat": 46.0786296,
+            "lng": 14.4724501
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1124",
+        "naslov": "Ljubljana Resljeva cesta 14",
+        "koordinate": {
+            "lat": 46.0543498,
+            "lng": 14.5110575
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1210",
+        "naslov": "Ljubljana \u0160entvid Pru\u0161nikova ulica 2",
+        "koordinate": {
+            "lat": 46.09041269999999,
+            "lng": 14.4725882
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1218",
+        "naslov": "Komenda Glavarjeva cesta 39",
+        "koordinate": {
+            "lat": 46.2027052,
+            "lng": 14.5415397
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1231",
+        "naslov": "Ljubljan \u010crnu\u010de Dunajska cesta 361",
+        "koordinate": {
+            "lat": 46.1024419,
+            "lng": 14.5296199
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1234",
+        "naslov": "Menge\u0161 Trdinov trg 8 A",
+        "koordinate": {
+            "lat": 46.1629406,
+            "lng": 14.5686204
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1241",
+        "naslov": "Kamnik Ljubljanska cesta 14 A",
+        "koordinate": {
+            "lat": 46.2071323,
+            "lng": 14.5972918
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1251",
+        "naslov": "Morav\u010de Vegova ulica 1",
+        "koordinate": {
+            "lat": 46.1354712,
+            "lng": 14.7446678
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1260",
+        "naslov": "Ljubljana Polje Zadobrov\u0161ka cesta 14",
+        "koordinate": {
+            "lat": 46.0560724,
+            "lng": 14.5843876
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1290",
+        "naslov": "Grosuplje Partizanska cesta 7",
+        "koordinate": {
+            "lat": 45.9560878,
+            "lng": 14.6576872
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1295",
+        "naslov": "Ivan\u010dana Gorica Plo\u0161\u010dad Osvobodilne fronte 4",
+        "koordinate": {
+            "lat": 45.93833859999999,
+            "lng": 14.8058986
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1310",
+        "naslov": "Ribnica Kolodvorska ulica 2",
+        "koordinate": {
+            "lat": 45.7404003,
+            "lng": 14.727302
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1330",
+        "naslov": "Ko\u010devje Ljubljanska cesta 23",
+        "koordinate": {
+            "lat": 45.6418719,
+            "lng": 14.8562269
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1351",
+        "naslov": "Brezovica pri Lj. Podpe\u0161ka cesta 20",
+        "koordinate": {
+            "lat": 46.0204546,
+            "lng": 14.4156787
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1353",
+        "naslov": "Borovnica Molkov trg 12",
+        "koordinate": {
+            "lat": 45.919439,
+            "lng": 14.3657063
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1360",
+        "naslov": "Vrhnika Po\u0161tna ulica 2",
+        "koordinate": {
+            "lat": 45.96343359999999,
+            "lng": 14.2954955
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1410",
+        "naslov": "Zagorje ob Savi Cesta zmage 28",
+        "koordinate": {
+            "lat": 46.1306621,
+            "lng": 14.9963062
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1420",
+        "naslov": "Trbovlje Trg revolucije 27",
+        "koordinate": {
+            "lat": 46.1482095,
+            "lng": 15.0416941
+        }
+    },
+    {
+        "\u0161tevilka mesta": "1422",
+        "naslov": "Trbovlje Trg Franca Fakina 4",
+        "koordinate": {
+            "lat": 46.1604049,
+            "lng": 15.0536808
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2104",
+        "naslov": "Maribor Istrska ulica 49",
+        "koordinate": {
+            "lat": 46.5484921,
+            "lng": 15.6742946
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2106",
+        "naslov": "Maribor \u0160arhova ulica 59 A",
+        "koordinate": {
+            "lat": 46.5514119,
+            "lng": 15.6211759
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2214",
+        "naslov": "Sladki Vrh Sladki Vrh 3 A",
+        "koordinate": {
+            "lat": 46.6968501,
+            "lng": 15.7354444
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2229",
+        "naslov": "Male\u010dnik Male\u010dnik 56",
+        "koordinate": {
+            "lat": 46.55560939999999,
+            "lng": 15.6934869
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2230",
+        "naslov": "Lenart v Slovenskih goricah Partizanska cesta 3",
+        "koordinate": {
+            "lat": 46.5772865,
+            "lng": 15.8305269
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2234",
+        "naslov": "Benedikt \u010colnikov trg 9",
+        "koordinate": {
+            "lat": 46.60704080000001,
+            "lng": 15.8914427
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2241",
+        "naslov": "Spodnji Duplek Cesta k Dravi 5",
+        "koordinate": {
+            "lat": 46.50055039999999,
+            "lng": 15.7495304
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2251",
+        "naslov": "Ptuj Mariborska Cesta 19",
+        "koordinate": {
+            "lat": 46.41658959999999,
+            "lng": 15.8598847
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2259",
+        "naslov": "Ivanjkovci Ivanjkovci 9 B",
+        "koordinate": {
+            "lat": 46.4623571,
+            "lng": 16.157248
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2270",
+        "naslov": "Ormo\u017e Po\u0161tna ulica 2",
+        "koordinate": {
+            "lat": 46.4080192,
+            "lng": 16.1487605
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2272",
+        "naslov": "Gori\u0161nica Gori\u0161nica 79",
+        "koordinate": {
+            "lat": 46.4120271,
+            "lng": 16.0133089
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2284",
+        "naslov": "Videm pri Ptuju Videm pri Ptuju 51 A",
+        "koordinate": {
+            "lat": 46.3691795,
+            "lng": 15.9023436
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2314",
+        "naslov": "Zgornja Polskava Mariborska ulica 26",
+        "koordinate": {
+            "lat": 46.4263267,
+            "lng": 15.611214
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2321",
+        "naslov": "Makole Makole 37",
+        "koordinate": {
+            "lat": 46.3173644,
+            "lng": 15.6670441
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2325",
+        "naslov": "Kidri\u010devo Kopali\u0161ka ulica 2",
+        "koordinate": {
+            "lat": 46.4034454,
+            "lng": 15.7970282
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2327",
+        "naslov": "Ra\u010de Ljubljanska cesta 14",
+        "koordinate": {
+            "lat": 46.4536713,
+            "lng": 15.6745675
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2352",
+        "naslov": "Selnica ob Dravi Slovenski trg 4",
+        "koordinate": {
+            "lat": 46.55150080000001,
+            "lng": 15.4928736
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2354",
+        "naslov": "Brestrnica Obrobna ulica 1",
+        "koordinate": {
+            "lat": 46.5671284,
+            "lng": 15.5783612
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2366",
+        "naslov": "Muta Glavni trg 31",
+        "koordinate": {
+            "lat": 46.61003729999999,
+            "lng": 15.1633923
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2370",
+        "naslov": "Dravograd Trg 4. julija 1",
+        "koordinate": {
+            "lat": 46.5891094,
+            "lng": 15.0242959
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2390",
+        "naslov": "Ravne na Koro\u0161kem Trg svobode 19",
+        "koordinate": {
+            "lat": 46.5446849,
+            "lng": 14.9662266
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2391",
+        "naslov": "Prevalje Trg 32 A",
+        "koordinate": {
+            "lat": 46.5454099,
+            "lng": 14.917139
+        }
+    },
+    {
+        "\u0161tevilka mesta": "2393",
+        "naslov": "\u010crna na Koro\u0161kem Center 16",
+        "koordinate": {
+            "lat": 46.4703983,
+            "lng": 14.8498787
+        }
+    },
+    {
+        "\u0161tevilka mesta": "3101",
+        "naslov": "Celje Krekov trg 9",
+        "koordinate": {
+            "lat": 46.2294024,
+            "lng": 15.2673827
+        }
+    },
+    {
+        "\u0161tevilka mesta": "3240",
+        "naslov": "\u0160marje pri Jel\u0161ah A\u0161ker\u010dev trg 26",
+        "koordinate": {
+            "lat": 46.2286544,
+            "lng": 15.5184635
+        }
+    },
+    {
+        "\u0161tevilka mesta": "3310",
+        "naslov": "\u017dalec Ulica heroja Staneta 1",
+        "koordinate": {
+            "lat": 46.2526713,
+            "lng": 15.1599198
+        }
+    },
+    {
+        "\u0161tevilka mesta": "3313",
+        "naslov": "Polzela Malte\u0161ka cesta 38",
+        "koordinate": {
+            "lat": 46.2807697,
+            "lng": 15.0760069
+        }
+    },
+    {
+        "\u0161tevilka mesta": "3330",
+        "naslov": "Mozirje Savinjska cesta 3",
+        "koordinate": {
+            "lat": 46.3388265,
+            "lng": 14.960194
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4101",
+        "naslov": "Kranj Dra\u017ego\u0161ka ulica 8",
+        "koordinate": {
+            "lat": 46.2486447,
+            "lng": 14.3563729
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4103",
+        "naslov": "Kranj \u0160kofjelo\u0161ka cesta 17",
+        "koordinate": {
+            "lat": 46.2310198,
+            "lng": 14.3462833
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4104",
+        "naslov": "Kranj Jezerska cesta 41",
+        "koordinate": {
+            "lat": 46.2472905,
+            "lng": 14.3689151
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4105",
+        "naslov": "Kranj Ulica Lojzeta Hrovata 2",
+        "koordinate": {
+            "lat": 46.2376655,
+            "lng": 14.3655154
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4202",
+        "naslov": "Naklo Glavna cesta 24",
+        "koordinate": {
+            "lat": 46.27294450000001,
+            "lng": 14.3157321
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4208",
+        "naslov": "\u0160en\u010dur Gasilska cesta 2 A",
+        "koordinate": {
+            "lat": 46.2423616,
+            "lng": 14.4191188
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4221",
+        "naslov": "\u0160kofja Loka Kapucinski trg 14",
+        "koordinate": {
+            "lat": 46.166843,
+            "lng": 14.3058782
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4226",
+        "naslov": "\u017diri Trg svobode 1",
+        "koordinate": {
+            "lat": 46.0477691,
+            "lng": 14.1099613
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4228",
+        "naslov": "\u017delezniki Na Kresu 1",
+        "koordinate": {
+            "lat": 46.225745,
+            "lng": 14.1688037
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4248",
+        "naslov": "Lesce Alpska cesta 37 B",
+        "koordinate": {
+            "lat": 46.361284,
+            "lng": 14.158083
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4264",
+        "naslov": "Bohinjska Bistrica Trg svobode 2 C",
+        "koordinate": {
+            "lat": 46.2723358,
+            "lng": 13.9528349
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4271",
+        "naslov": "Jesenice Cesta Cirila Tav\u010darja 8",
+        "koordinate": {
+            "lat": 46.4396068,
+            "lng": 14.0431084
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4274",
+        "naslov": "\u017dirovnica \u017dirovnica 4",
+        "koordinate": {
+            "lat": 46.4044239,
+            "lng": 14.1375549
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4280",
+        "naslov": "Kranjska Gora Borov\u0161ka cesta 92",
+        "koordinate": {
+            "lat": 46.4849723,
+            "lng": 13.7820449
+        }
+    },
+    {
+        "\u0161tevilka mesta": "4290",
+        "naslov": "Tr\u017ei\u010d Predilni\u0161ka cesta 10",
+        "koordinate": {
+            "lat": 46.3616251,
+            "lng": 14.3071259
+        }
+    },
+    {
+        "\u0161tevilka mesta": "5101",
+        "naslov": "Nova Gorica Kidri\u010deva ulica 19",
+        "koordinate": {
+            "lat": 45.955439,
+            "lng": 13.6481087
+        }
+    },
+    {
+        "\u0161tevilka mesta": "5102",
+        "naslov": "Nova Gorica Industrijska cesta 9",
+        "koordinate": {
+            "lat": 45.95422569999999,
+            "lng": 13.6733574
+        }
+    },
+    {
+        "\u0161tevilka mesta": "5220",
+        "naslov": "Tolmin Trg mar\u0161ala Tita 10",
+        "koordinate": {
+            "lat": 46.1830168,
+            "lng": 13.7335635
+        }
+    },
+    {
+        "\u0161tevilka mesta": "5270",
+        "naslov": "Ajdov\u0161\u010dina Gori\u0161ka cesta 24",
+        "koordinate": {
+            "lat": 45.88731749999999,
+            "lng": 13.9031099
+        }
+    },
+    {
+        "\u0161tevilka mesta": "5280",
+        "naslov": "Idrija Vodnikova ulica 1",
+        "koordinate": {
+            "lat": 46.0013411,
+            "lng": 14.0261225
+        }
+    },
+    {
+        "\u0161tevilka mesta": "5290",
+        "naslov": "\u0160empeter pri Gorici Vrtojbenska cesta 19 C",
+        "koordinate": {
+            "lat": 45.9283559,
+            "lng": 13.6405447
+        }
+    },
+    {
+        "\u0161tevilka mesta": "6104",
+        "naslov": "Koper Kolodvorska cesta 9",
+        "koordinate": {
+            "lat": 45.54017,
+            "lng": 13.7386487
+        }
+    },
+    {
+        "\u0161tevilka mesta": "6210",
+        "naslov": "Se\u017eana Partizanska cesta 48 A",
+        "koordinate": {
+            "lat": 45.7075184,
+            "lng": 13.868562
+        }
+    },
+    {
+        "\u0161tevilka mesta": "6230",
+        "naslov": "Postojna Ulica 1. maja 2 A",
+        "koordinate": {
+            "lat": 45.7742705,
+            "lng": 14.2138533
+        }
+    },
+    {
+        "\u0161tevilka mesta": "6310",
+        "naslov": "Izola Cankarjev drevored 1",
+        "koordinate": {
+            "lat": 45.5368801,
+            "lng": 13.6605407
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8102",
+        "naslov": "Novo mesto Ulica Slavka Gruma 7",
+        "koordinate": {
+            "lat": 45.7986362,
+            "lng": 15.1552946
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8105",
+        "naslov": "Novo mesto Novi trg 7",
+        "koordinate": {
+            "lat": 45.8048051,
+            "lng": 15.1643307
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8210",
+        "naslov": "Trebnje Goliev trg 11",
+        "koordinate": {
+            "lat": 45.90752029999999,
+            "lng": 15.0072844
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8250",
+        "naslov": "Bre\u017eice Ulica stare pravde 34",
+        "koordinate": {
+            "lat": 45.9048981,
+            "lng": 15.5935286
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8257",
+        "naslov": "Dobova Ulica bratov Gerjovi\u010dev 52",
+        "koordinate": {
+            "lat": 45.8950489,
+            "lng": 15.6600698
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8261",
+        "naslov": "Jesenice na Dolenjskem Jesenice 9",
+        "koordinate": {
+            "lat": 45.8599617,
+            "lng": 15.6879755
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8271",
+        "naslov": "Kr\u0161ko Trg Matije Gubca 1",
+        "koordinate": {
+            "lat": 45.9579966,
+            "lng": 15.4944917
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8290",
+        "naslov": "Sevnica Trg svobode 9",
+        "koordinate": {
+            "lat": 46.0097701,
+            "lng": 15.3029322
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8310",
+        "naslov": "\u0160entjernej Prvomajska cesta 3",
+        "koordinate": {
+            "lat": 45.8439372,
+            "lng": 15.3388595
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8330",
+        "naslov": "Metlika Naselje Borisa Kidri\u010da 2",
+        "koordinate": {
+            "lat": 45.644935,
+            "lng": 15.3167912
+        }
+    },
+    {
+        "\u0161tevilka mesta": "8340",
+        "naslov": "\u010crnomelj Kolodvorska cesta 30 A",
+        "koordinate": {
+            "lat": 45.5747784,
+            "lng": 15.1905069
+        }
+    },
+    {
+        "\u0161tevilka mesta": "9101",
+        "naslov": "Murska Sobota Trg Zmage 6",
+        "koordinate": {
+            "lat": 46.66082610000001,
+            "lng": 16.1637829
+        }
+    },
+    {
+        "\u0161tevilka mesta": "9203",
+        "naslov": "Petrovci Gornji Petrovci 40 E",
+        "koordinate": {
+            "lat": 46.8030552,
+            "lng": 16.2177301
+        }
+    },
+    {
+        "\u0161tevilka mesta": "9220",
+        "naslov": "Lendava Trg ljudske pravice 7",
+        "koordinate": {
+            "lat": 46.5618657,
+            "lng": 16.4549268
+        }
+    },
+    {
+        "\u0161tevilka mesta": "9232",
+        "naslov": "\u010cren\u0161ovci Ulica Prekmurske \u010dete 14",
+        "koordinate": {
+            "lat": 46.5690299,
+            "lng": 16.2938688
+        }
+    },
+    {
+        "\u0161tevilka mesta": "9250",
+        "naslov": "Gornja Radgona Cesta na Stadion 1",
+        "koordinate": {
+            "lat": 46.675168,
+            "lng": 15.9941974
+        }
+    },
+    {
+        "\u0161tevilka mesta": "9252",
+        "naslov": "Radenci Panonska cesta 5",
+        "koordinate": {
+            "lat": 46.642603,
+            "lng": 16.0392936
+        }
+    }
+]
