@@ -9,6 +9,7 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
 
     <application
@@ -88,7 +89,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDM0UAmgp6mVlSiiPUV3TwxpmgP4PbiNEs" />
+            android:value="AIzaSyAsALSeMRlv4V8IwMe0Tw9EHHymg-bsa-8" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

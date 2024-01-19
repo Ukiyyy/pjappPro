@@ -1,7 +1,6 @@
 package com.example.pjapppro
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
@@ -14,6 +13,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.example.pjapppro.databinding.ActivityMapBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -24,27 +25,33 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    companion object {
+        private const val PERMISSIONS_REQUEST_CODE = 100
+    }
+
     private lateinit var binding: ActivityMapBinding
     private lateinit var googleMap: GoogleMap
     lateinit var app: MyApplication
+    lateinit var city: TSP.City
 
-    private val handler = Handler(Looper.getMainLooper()) // Handler for UI updates
+    private val handler = Handler(Looper.getMainLooper())
     private var iteration = 0
     private val maxIterations = 1000
     private var newPathFound = false
 
     val cities = mutableListOf<CityJson>()
     private var currentPolyline: Polyline? = null
+    var decompressedDistanceFilePath=""
+    var decompressedTimeFilePath=""
 
     private val REQUEST_CODE_PERMISSION = 1
 
@@ -67,6 +74,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        checkAndRequestPermissions()
+
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
+
+
+        copyFileFromAssets("compressed_distance_matrix.bin")
+        copyFileFromAssets("compressed_time_matrix.bin")
+
+        // distance
+        val compressedDistanceFilePath = File(filesDir, "compressed_distance_matrix.bin").absolutePath
+        decompressedDistanceFilePath = File(filesDir, "decompressed_distance_matrix.txt").absolutePath
+
+        // time
+        val compressedTimeFilePath = File(filesDir, "compressed_time_matrix.bin").absolutePath
+        decompressedTimeFilePath = File(filesDir, "decompressed_time_matrix.txt").absolutePath
+
+        val python = Python.getInstance()
+        val pythonModule = python.getModule("Dekompresija") // Replace with your Python script name
+        pythonModule.callAttr("execute", compressedDistanceFilePath, decompressedDistanceFilePath)
+        pythonModule.callAttr("execute", compressedTimeFilePath, decompressedTimeFilePath)
+
         binding.btnCalculatePath.setOnClickListener {
             val selectedRadioButtonId = binding.radioGroupOptions.checkedRadioButtonId
 
@@ -84,6 +114,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun logFileContents(filePath: String) {
+        try {
+            val file = File(filePath)
+            if (file.exists()) {
+                val contents = file.readText()
+                Log.d("FileContents", contents)
+            } else {
+                Log.e("FileError", "File does not exist: $filePath")
+            }
+        } catch (e: IOException) {
+            Log.e("FileError", "Error reading file: ${e.message}")
+        }
+    }
+
+
+    private fun copyFileFromAssets(fileName: String) {
+        val file = File(filesDir, fileName)
+        if (!file.exists()) {
+            try {
+                val inputStream = assets.open(fileName)
+                val outputStream = FileOutputStream(file)
+                inputStream.copyTo(outputStream)
+                inputStream.close()
+                outputStream.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     private fun resetState() {
         iteration = 0
         newPathFound = false
@@ -91,37 +151,52 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    private fun updateMap(fromIndex: Int, toIndex: Int) {
+    private fun updateMap(fromIndex: Int, toIndex: Int, path: TSP.Tour) {
         // Clear the existing polyline
         currentPolyline?.remove()
 
-        if (cities.size > fromIndex && cities.size > toIndex) {
-            val polylineOptions = PolylineOptions().apply {
-                color(Color.BLUE) // Set the color of the polyline
-                width(5f)        // Set the width of the polyline
-                add(LatLng(cities[fromIndex].latitude, cities[fromIndex].longitude)) // Start point
-                add(LatLng(cities[toIndex].latitude, cities[toIndex].longitude))     // End point
-            }
 
-            // Draw the new polyline on the map
-            currentPolyline = googleMap.addPolyline(polylineOptions)
+        //cities[c.index][c2.index]
+        val polylineOptions = PolylineOptions().apply {
+            color(Color.BLUE) // Set the color of the polyline
+            width(5f)        // Set the width of the polyline
+            for (i in 0 until path.getPath().size) {
+                if (i + 1 >= path.getPath().size) {
+                    break
+                }
+                var c = path.getPath()[i]
+                var c2 = path.getPath()[i + 1]
+                if (c != null) {
+                    if (c2 != null) {
+                        add(LatLng(cities[c.index].latitude, cities[c2.index].longitude))
+                    }
+                }
+            }
+            var last = path.getPath()[path.getPath().size-1]
+            var first = path.getPath()[0]
+            if (last != null) {
+                if (first != null) {
+                    add(LatLng(cities[last.index].latitude, cities[first.index].longitude))
+                }
+            }
         }
+        currentPolyline = googleMap.addPolyline(polylineOptions)
     }
 
     private fun calculatePathBasedOnTime() {
+        logFileContents(decompressedDistanceFilePath)
         resetState()
-        val path = "duration_matrix.txt" // Replace with the actual file path for time-based calculation
         while (iteration < maxIterations) {
             Log.d("MapsActivity", "Inside while loop, iteration: $iteration")
-            val tsp = TSP(this, path, 1000)
+            val tsp = TSP(this, decompressedDistanceFilePath, 1000)
             val ga = GA(100, 0.8, 0.1)
             val bestPath: TSP.Tour? = ga.execute(tsp)
-            if (bestPath != null){
+            if (bestPath != null) {
                 newPathFound = true
                 val maxX = tsp.getCities().maxOfOrNull { it.x }?.toInt() ?: 1
                 val maxY = tsp.getCities().maxOfOrNull { it.y }?.toInt() ?: 1
                 Log.d("MapsActivity", "New path found: $newPathFound, maxX: $maxX, maxY: $maxY")
-                updateMap(maxX, maxY)
+                updateMap(maxX, maxY, bestPath)
             }
             iteration++
         }
@@ -129,18 +204,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun calculatePathBasedOnLength() {
         resetState()
-        val path = "distance_matrix.txt"
         while (iteration < maxIterations) {
             Log.d("MapsActivity", "Inside while loop, iteration: $iteration")
-            val tsp = TSP(this, path, 1000)
+            val tsp = TSP(this, decompressedTimeFilePath, 1000)
             val ga = GA(100, 0.8, 0.1)
             val bestPath: TSP.Tour? = ga.execute(tsp)
-            if (bestPath != null){
+            if (bestPath != null) {
                 newPathFound = true
                 val maxX = tsp.getCities().maxOfOrNull { it.x }?.toInt() ?: 1
                 val maxY = tsp.getCities().maxOfOrNull { it.y }?.toInt() ?: 1
                 Log.d("MapsActivity", "New path found: $newPathFound, maxX: $maxX, maxY: $maxY")
-                updateMap(maxX, maxY)
+                updateMap(maxX, maxY, bestPath)
             }
             iteration++
         }
@@ -150,7 +224,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val jsonString: String
 
         try {
-            val jsonString = assets.open("location_data.json").bufferedReader().use { it.readText() }
+            val jsonString =
+                assets.open("location_data.json").bufferedReader().use { it.readText() }
             val jsonArray = JSONArray(jsonString)
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
@@ -211,23 +286,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun isLocationPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_PERMISSION)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initializeMap()
-            } else {
-                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            REQUEST_CODE_PERMISSION
+        )
     }
 
     private fun initializeMap() {
@@ -237,7 +311,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val latLng = LatLng(markerInfo.latitude, markerInfo.longitude)
                 val markerOptions = MarkerOptions().position(latLng).title(markerInfo.ime)
                 googleMap.addMarker(markerOptions)
-                Log.d("MapsActivity", "Added marker at: lat=${markerInfo.latitude}, lng=${markerInfo.longitude}")
+                Log.d(
+                    "MapsActivity",
+                    "Added marker at: lat=${markerInfo.latitude}, lng=${markerInfo.longitude}"
+                )
             }
         } else {
             Log.d("MapsActivity", "No markers to add to the map.")
@@ -259,6 +336,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
     }
+
     private fun addMarkerFromIntent() {
         app = application as MyApplication
         val latitude = intent.getDoubleExtra("latitude", 0.0)
@@ -268,12 +346,66 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val latLng = LatLng(latitude, longitude)
             val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
             val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())
-            val marker = MarkerOptions().position(latLng).title("Poskus odklepanja ob $currentTime, $currentDate")
-            val title:String = "Poskus odklepanja ob $currentTime, $currentDate"
+            val marker = MarkerOptions().position(latLng)
+                .title("Poskus odklepanja ob $currentTime, $currentDate")
+            val title: String = "Poskus odklepanja ob $currentTime, $currentDate"
             googleMap.addMarker(marker)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f))
 
-            app.markerList.add(markerji(title,latitude,longitude))
+            app.markerList.add(markerji(title, latitude, longitude))
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        //deleteDecompressedFile()
+    }
+
+    private fun deleteDecompressedFile() {
+        try {
+            val file = File(decompressedDistanceFilePath)
+            if (file.exists()) {
+                val deleted = file.delete()
+                if (deleted) {
+                    Log.d("MapsActivity", "File deleted successfully")
+                } else {
+                    Log.d("MapsActivity", "Failed to delete the file")
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("MapsActivity", "Error deleting the file", e)
+        }
+    }
+    private fun checkAndRequestPermissions() {
+        val readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        val listPermissionsNeeded = ArrayList<String>()
+
+        if (readPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (writePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+        if (listPermissionsNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toTypedArray(), PERMISSIONS_REQUEST_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSIONS_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permissions are granted
+                    Log.d("MapsActivity", "Permissions granted.")
+                } else {
+                    // Permissions are denied
+                    Log.d("MapsActivity", "Permissions denied.")
+                }
+                return
+            }
         }
     }
 }

@@ -44,6 +44,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -94,6 +96,7 @@ class OpenActivity : AppCompatActivity() {
             startActivity(intentStatistics)
         }
     }
+
 
     fun btnQRscanner(view: View) {
        onScanQRcode(view)

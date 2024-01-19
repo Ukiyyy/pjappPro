@@ -3,6 +3,8 @@ package com.example.pjapppro
 import android.content.Context
 import android.util.Log
 import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
 import java.io.InputStreamReader
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -116,7 +118,7 @@ class TSP(private val context: Context, path: String, maxEvaluations: Int) {
     private fun loadData(path: String) {
         val assetManager = context.assets
         try {
-            assetManager.open(path).use { inputStream ->
+            FileInputStream(File(path)).use { inputStream ->
                 BufferedReader(InputStreamReader(inputStream)).use { br ->
                     var line: String?
                     var edgeWeightType: String? = null
