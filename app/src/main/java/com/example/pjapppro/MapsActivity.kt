@@ -357,12 +357,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     override fun onDestroy() {
         super.onDestroy()
-        //deleteDecompressedFile()
+        deleteDecompressedFile()
     }
 
     private fun deleteDecompressedFile() {
         try {
             val file = File(decompressedDistanceFilePath)
+            val timeFile= File(decompressedTimeFilePath)
             if (file.exists()) {
                 val deleted = file.delete()
                 if (deleted) {
@@ -371,8 +372,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     Log.d("MapsActivity", "Failed to delete the file")
                 }
             }
+            if (timeFile.exists()) {
+                val deleted = timeFile.delete()
+                if (deleted) {
+                    Log.d("MapsActivity", "TimeFile deleted successfully")
+                } else {
+                    Log.d("MapsActivity", "Failed to delete the TimeFile")
+                }
+            }
         } catch (e: Exception) {
-            Log.e("MapsActivity", "Error deleting the file", e)
+            Log.e("MapsActivity", "Error deleting the TimeFile", e)
         }
     }
     private fun checkAndRequestPermissions() {
